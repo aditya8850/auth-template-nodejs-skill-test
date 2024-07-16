@@ -68,7 +68,7 @@ project-root/
 1. Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/arshali2774/Nodejs_auth_CN
+git clone https://github.com/aditya8850/auth-template-nodejs-skill-test
 ```
 
 2. Navigate to the project directory:
@@ -103,7 +103,7 @@ npm run dev
 
 ## Credits
 
-This project was created by Arsh Ali. Special thanks to Coding Ninjas.
+This project was created by Aditya K. Special thanks to Coding Ninjas.
 
 ## License
 
