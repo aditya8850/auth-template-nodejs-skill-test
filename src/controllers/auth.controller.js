@@ -28,7 +28,7 @@ export const registerUser = async (req, res) => {
       email,
       password,
       username: email,
-      googleId: email,
+      googleId: null,
     });
     req.flash('success', 'User signed up successfully!');
     res.redirect('/');
