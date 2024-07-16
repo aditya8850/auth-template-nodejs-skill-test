@@ -50,7 +50,6 @@ export const getSignInPage = (req, res) => {
 // Controller middleware to handle sign-in form submissions
 export const loginUser = (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {
-    console.log(info,user);
     if (err) {
       return next(err);
     }
