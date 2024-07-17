@@ -185,7 +185,7 @@ export const forgotPassword = async (req, res) => {
     // Generate a random token
     const token = crypto.randomBytes(20).toString('hex');
     user.resetPasswordToken = token;
-    user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+    user.resetPasswordExpires = Date.now() + 5 * 60 * 1000; // Token expires in 1 hour
     await user.save();
 
     // Send password reset email
@@ -212,16 +212,14 @@ export const resetViaEmailPost = async (req, res, next) => {
     const { token } = req.params
     const newPassword = req.body.password
     const user = await UserModel.findOne({
-      resetPasswordToken: token // Ensure the token has not expired
+      resetPasswordToken: token,
+      resetPasswordExpires: { $gt: Date.now() } // Ensure the token has not expired
     });
     console.log(user)
     if (!user) {
       req.flash('error', 'Password reset token is invalid or has expired.');
       return res.redirect('/forgot-password');
     }
-
-    
-
     // Update the user's password and clear the reset token and expiration
     user.password = newPassword;
     user.resetPasswordToken = undefined;
