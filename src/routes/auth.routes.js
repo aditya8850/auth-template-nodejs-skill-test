@@ -11,6 +11,10 @@ import {
   registerUser,
   resetPassword,
   signOutUser,
+  forgotPasswordView,
+  forgotPassword,
+  resetViaEmailView,
+  resetViaEmailPost
 } from '../controllers/auth.controller.js';
 import { isAuthenticated } from '../middlewares/isAuthenticated.js';
 const authRouter = express.Router();
@@ -46,5 +50,10 @@ authRouter.post('/resetpassword', isAuthenticated, resetPassword);
 // Routes for Google authentication
 authRouter.get('/auth/google', googleAuth);
 authRouter.get('/auth/google/callback', googleAuthCallback);
+
+authRouter.get('/forgot-password',forgotPasswordView)
+authRouter.post('/forgot-password',forgotPassword)
+authRouter.get('/reset-password/:token',resetViaEmailView)
+authRouter.post('/reset-password/:token',resetViaEmailPost)
 
 export default authRouter;

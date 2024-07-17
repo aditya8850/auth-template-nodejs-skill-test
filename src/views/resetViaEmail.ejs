@@ -1,0 +1,25 @@
+<% if (message && message.length>0) { %>
+    <% console.log(message) %>
+    <div id="notification">
+      <p><i class="fa-solid fa-circle-xmark"></i></p>
+      <p><%= message  %> </p>
+    </div>
+    <% } %>
+  
+<div id="signin_display" class="default_container">
+    <h4>Enter your new password</h4>
+  
+    <div class="fingerprint_icon">
+      <i class="fa-solid fa-fingerprint"></i>
+    </div>
+    <form action="/reset-password/<%= token %>" method="POST" class="form_styles" autocomplete="off">
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter new password"
+        required
+      />
+      <button type="submit">Change Password</button>
+     
+    </form>
+  </div>

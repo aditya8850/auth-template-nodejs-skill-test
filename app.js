@@ -8,6 +8,7 @@ import session from 'express-session';
 import flash from 'connect-flash';
 import expressEjsLayouts from 'express-ejs-layouts';
 import path from 'path';
+import User from './src/models/user.model.js';
 // app
 const app = express();
 //Middlewares
@@ -33,7 +34,6 @@ app.use(flash());
 
 //Routes
 app.use('/', authRouter);
-
 //Start Server
 app.listen(3000, () => {
   console.log('Server running on port 3000');

@@ -1,10 +1,17 @@
-<!-- Flash message -->
-<% if (messageError && messageError.length>0) { %>
-  <% messageError %>
-<div id="notification">
-  <p><i class="fa-solid fa-circle-xmark"></i></p>
-  <p><%= messageError %></p>
-</div>
+!-- Flash message for error -->
+<% if (messageError && messageError.length > 0) { %>
+  <div id="notification" class="error">
+    <p><i class="fa-solid fa-circle-xmark"></i></p>
+    <p><%= messageError %></p>
+  </div>
+<% } %>
+
+<!-- Flash message for success -->
+<% if (messageSuccess && messageSuccess.length > 0) { %>
+  <div id="notification" class="success">
+    <p><i class="fa-solid fa-circle-check"></i></p>
+    <p><%= messageSuccess %></p>
+  </div>
 <% } %>
 <div id="signin_display" class="default_container">
   <h1>Sign In</h1>
@@ -28,5 +35,7 @@
       autocomplete="new-password"
     />
     <button type="submit"><i class="fa-solid fa-user-lock"></i>Sign In</button>
+    <button type="none"><a href="/forgot-password" style="text-decoration: none; color: inherit; width:100%">Forgot Password?</a></button>
+   
   </form>
 </div>

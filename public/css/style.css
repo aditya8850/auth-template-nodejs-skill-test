@@ -12,6 +12,11 @@
   --white-50: #ffffff50;
   --font: 'Gabarito', sans-serif;
 }
+h4{
+  font-family: var(--font);
+  color: var(-green-800-75);
+  font-size: 2rem;
+}
 
 * {
   margin: 0;

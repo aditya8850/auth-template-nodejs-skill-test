@@ -1,0 +1,29 @@
+<!-- Flash message -->
+<% if (message && message.length>0) { %>
+  <% console.log(message) %>
+  <div id="notification">
+    <p><i class="fa-solid fa-circle-xmark"></i></p>
+    <p><%= message  %> </p>
+  </div>
+  <% } %>
+
+
+<div id="signin_display" class="default_container">
+    <h4>Enter email to send the reset link.</h4>
+  
+    <div class="fingerprint_icon">
+      <i class="fa-solid fa-fingerprint"></i>
+    </div>
+    <form action="/forgot-password" method="POST" class="form_styles" autocomplete="off">
+      <input
+        type="email"
+        name="email"
+        placeholder="Email"
+        required
+        autocomplete="new-user-email"
+      />
+     
+      <button type="submit">Send password reset link</button>
+     
+    </form>
+  </div>

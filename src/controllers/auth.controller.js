@@ -1,6 +1,8 @@
 import UserModel from '../models/user.model.js';
 import passport from '../config/passport.config.js';
-
+import crypto from "crypto"
+import { sendPasswordResetEmail } from '../config/nodemailer.config.js';
+import bcrypt from "bcrypt"
 // controller to render the index page
 export const getIndexPage = (req, res) => {
   const messageSuccess = req.flash('success');
@@ -43,9 +45,10 @@ export const registerUser = async (req, res) => {
 //controller to render the signin page
 export const getSignInPage = (req, res) => {
   const messageError = req.flash('error');
-  req.flash('error', null);
-  res.render('signin', { messageError });
+  const messageSuccess = req.flash('success');
+  res.render('signin', { messageError, messageSuccess });
 };
+
 
 // Controller middleware to handle sign-in form submissions
 export const loginUser = (req, res, next) => {
@@ -86,7 +89,7 @@ export const signOutUser = (req, res) => {
       res.status(500).send('Error signing out');
     } else {
       // Redirect the user to the sign-in page after successful sign-out
-      const messageSuccess = req.flash('success',"user logged out")
+      const messageSuccess = req.flash('success', "user logged out")
       res.render('index', { messageSuccess });
     }
   });
@@ -162,3 +165,73 @@ export const googleAuthCallback = (req, res, next) => {
     });
   })(req, res, next);
 };
+
+//controller to get forgot password view
+export const forgotPasswordView = (req, res, next) => {
+  const message = req.flash('success', null)|| req.flash('error');;
+  res.render('forgot', { message });
+
+}
+//controller function to password reset via forgot password
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      req.flash('error', `${email} is not registered with us.`);
+      return res.redirect('/forgot-password');
+    }
+
+    // Generate a random token
+    const token = crypto.randomBytes(20).toString('hex');
+    user.resetPasswordToken = token;
+    user.resetPasswordExpires = Date.now() + 3600000; // Token expires in 1 hour
+    await user.save();
+
+    // Send password reset email
+    await sendPasswordResetEmail(email, token);
+
+    req.flash('success', 'Password reset email sent. Please check your email.');
+    return res.redirect('/');
+  } catch (err) {
+    console.error('Error in forgotPassword:', err);
+    req.flash('error', 'Error sending password reset email. Please try again later.');
+    return res.redirect('/forgot-password');
+  }
+};
+
+// route to reset password via email link
+export const resetViaEmailView = (req, res, next) => {
+  const { token } = req.params; // Get token from URL params
+  const message = req.flash('success') || req.flash('error');
+  res.render('resetViaEmail', { token, message});
+};
+
+export const resetViaEmailPost = async (req, res, next) => {
+  try {
+    const { token } = req.params
+    const newPassword = req.body.password
+    const user = await UserModel.findOne({
+      resetPasswordToken: token // Ensure the token has not expired
+    });
+    console.log(user)
+    if (!user) {
+      req.flash('error', 'Password reset token is invalid or has expired.');
+      return res.redirect('/forgot-password');
+    }
+
+    
+
+    // Update the user's password and clear the reset token and expiration
+    user.password = newPassword;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    req.flash('success', 'Password has been reset successfully.');
+    res.redirect('/signin');
+  } catch (error) {
+    req.flash('error', 'err updating password try again.');
+    res.redirect('/')
+  }
+}
