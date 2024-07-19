@@ -110,4 +110,4 @@ This project was created by Aditya K. Special thanks to Coding Ninjas.
 This project is licensed under the MIT License.
 
 
-[Deployed URI](https://auth-template-nodejs-skill-test.onrender.com/signup)
+[Deployed URI](https://auth-template-nodejs-skill-test.onrender.com/)
